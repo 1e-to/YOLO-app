@@ -22,17 +22,18 @@ sock.connect(server_address)
 global_size = 0
 limit = 0
 
-filename_ = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\b_proc.avi"
+filename_ = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\out1.avi"
 out = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\out.avi"
 img_process = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\img_process.png"
 
 codec = cv2.VideoWriter_fourcc(*'XVID')
-writer = cv2.VideoWriter(out,codec, 25.0, (640,480))
+writer = cv2.VideoWriter(out,codec, 25.0, (400,300))
+# writer = cv2.VideoWriter(out,codec, 25.0, (640,480))
 # writer = cv2.VideoWriter(out, cv2.VideoWriter_fourcc(*"MJPG"), 25,(640,480))
 
 
-# vid = cv2.VideoCapture(filename_)
-vid = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+vid = cv2.VideoCapture(filename_)
+# vid = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 
 while(vid.isOpened()):
