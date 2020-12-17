@@ -20,7 +20,7 @@ out = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\out.avi"
 img_process = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\img_process.png"
 
 codec = cv2.VideoWriter_fourcc(*'XVID')
-writer = cv2.VideoWriter(out, codec, 25.0, (400,300))
+writer = cv2.VideoWriter(out, codec, 25.0, (1920,1080))
 # writer = cv2.VideoWriter(out,codec, 25.0, (640,480))
 # writer = cv2.VideoWriter(out, cv2.VideoWriter_fourcc(*"MJPG"), 25,(640,480))
 vid = cv2.VideoCapture(video_filename)

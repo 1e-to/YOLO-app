@@ -78,16 +78,16 @@ while True:
 						sock.sendall(b'GOT IMAGE')
 
 						#########
-						# nn_script = "C:\\Users\\etotmeni\\OneDrive - Intel Corporation\\Desktop\\App\\nn.py"
-						# subprocess.check_call([sys.executable, nn_script])
-						#########
 
 						im = cv2.imread(img_path)
 						img = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 						img_orig = img.shape
 
-						img = cv2.resize(img, (400, 300))
-						img_orig = img.shape
+						img = cv2.resize(img, (1920,1080))
+						fx = 0.4
+						fy = 0.4
+						img = cv2.resize(img, None, fx=fx, fy=fy)
+						font = cv2.FONT_HERSHEY_PLAIN
 						height, width, channels = img.shape
 
 						blob = cv2.dnn.blobFromImage(img, # input image (with 1-, 3- or 4-channels).
@@ -125,46 +125,28 @@ while True:
 									confidences.append(float(confidence))
 									class_ids.append(class_id)
 
-						number_objects_detected = len(boxes)
+							indexes = cv2.dnn.NMSBoxes(boxes,confidences, 0.5, 0.4)
+							number_objects_detected = len(boxes)
 
-						if number_objects_detected:
-							classes = {0:'unknow', 56:'chair', 57:'sofa', 59:'bed', 60:'diningtable'}
-							for i in range(100):
-								if i not in classes.keys():
-									classes[i] = "???"
+							if number_objects_detected:
+								for i in range(len(boxes)):
+									x, y, w, h = boxes[i]
+									if i in indexes:
+										label = str(classes[class_ids[i]])
+										if label != "?????":
+											cv2.rectangle(img,(x,y),(x+w, y+h), (0,255,0), 2)
+											cv2.putText(img, label, (x+10,y-10), font, 3, (0,255,0), 2)
+											cv2.circle(img, (center_x, center_y), 10, (0, 255, 0), 2)
 
-							indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-
-							font = cv2.FONT_HERSHEY_PLAIN
-							color = 0
-							label = ""
-							x = 0
-							y = 0
-							w = 0
-							h = 0
-
-							x, y, w, h = boxes[0]
-							label = str(classes[class_ids[0]])
-							color = colors[0]
-
-							# Draw boxes of detected objects
-							cv2.rectangle(img, (x,y), (w,h), color, 1)
-							cv2.circle(img, (center_x, center_y), 10, (0,255,0))
-							cv2.putText(img, label, (x,y - 10), font, 1, (0,255,0), 2)
-
-							img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-							res = cv2.imwrite(res_path ,img)
-							cv2.waitKey(0)
-							cv2.destroyAllWindows()
-
-						else:
-							img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-							res = cv2.imwrite(res_path ,img)
+						img = cv2.resize(img, (1920,1080))
+						img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+						res = cv2.imwrite(res_path ,img)
+						cv2.waitKey(0)
+						cv2.destroyAllWindows()
 
 						#########
 
 						sendfile = open(res_path, 'rb')
-						# sendfile = open(img_path, 'rb')
 						bytes = sendfile.read()
 						size = len(bytes)
 
